@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MVC_Project.Data;
+using MVC_Project.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,8 +29,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=Index}")
-    .WithStaticAssets();
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 
 app.Run();

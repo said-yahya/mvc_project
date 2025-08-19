@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QBocsKLt2bU=",
+  "dgSpecHash": "XATD3BDUXCk=",
   "success": true,
-  "projectFilePath": "/Users/macbook/Desktop/C#/MVC_Project/MVC_Project.csproj",
+  "projectFilePath": "/Users/macbook/Desktop/MVC_Project/MVC_Project/MVC_Project.csproj",
   "expectedPackageFiles": [
     "/Users/macbook/.nuget/packages/azure.core/1.38.0/azure.core.1.38.0.nupkg.sha512",
     "/Users/macbook/.nuget/packages/azure.identity/1.11.4/azure.identity.1.11.4.nupkg.sha512",
