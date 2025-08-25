@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MVC_Project.Data;
 using MVC_Project.Controllers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,16 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Cookie authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login"; // redirect unauthenticated users here
+        options.LogoutPath = "/Login/Logout";
+        options.AccessDeniedPath = "/Login";
+        options.SlidingExpiration = true;
+    });
 
 var app = builder.Build();
 
@@ -23,6 +34,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

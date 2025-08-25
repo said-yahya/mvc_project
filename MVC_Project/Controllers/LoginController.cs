@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using MVC_Project.Data;
 using MVC_Project.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MVC_Project.Controllers
 {
@@ -20,7 +23,7 @@ namespace MVC_Project.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (model.Email == null || model.Password == null)
             {
@@ -33,12 +36,25 @@ namespace MVC_Project.Controllers
             {
                 return BadRequest("User not found");
             }
-            else if ((user.Password != model.Password) || (user.Name != model.Name))
+            else if (user.Password != model.Password)
             {
-                return BadRequest("Invalid password or name");
+                return BadRequest("Invalid password");
             }
 
-            Console.WriteLine($"Login attempt: {model.Email}");
+            // Create claims for the signed-in user
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Surname, user.Lastname),
+                new Claim(ClaimTypes.Email, user.Email)
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            Console.WriteLine($"Login success: {user.Email}");
             return RedirectToAction("Index", "Home");
         }
 
@@ -82,6 +98,13 @@ namespace MVC_Project.Controllers
                 Console.WriteLine($"Signup error: {ex.Message}");
                 return RedirectToAction("Index", "Login");
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Login");
         }
     }
 }

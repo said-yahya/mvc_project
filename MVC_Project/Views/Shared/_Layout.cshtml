@@ -1,50 +1,149 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MVC_Project</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MVC_Project.styles.css" asp-append-version="true" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - MVC_Project</title>
+	<script type="importmap"></script>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/MVC_Project.styles.css" asp-append-version="true" />
+	<style>
+		:root { --nav-h: 56px; }
+		/* Keep navbar above sidebar */
+		.app-navbar { position: sticky; top: 0; z-index: 1100; }
+		/* Full-height, flush-left sidebar positioned below navbar */
+		#appSidebar {
+			position: fixed;
+			top: var(--nav-h);
+			left: 0;
+			height: calc(100vh - var(--nav-h));
+			width: 280px;
+			background: #efefe8;
+			border-right: 1px solid #ddd;
+			transform: translateX(-100%);
+			transition: transform 220ms ease;
+			z-index: 1040;
+			padding: 1rem;
+		}
+		#appSidebar.open { transform: translateX(0); }
+		#appSidebar .list-group-item { background: transparent; border: 0; padding-left: .25rem; }
+		#sidebarBackdrop {
+			position: fixed;
+			top: var(--nav-h);
+			left: 0; right: 0; bottom: 0;
+			background: rgba(0,0,0,.35);
+			display: none;
+			z-index: 1030;
+		}
+		#sidebarBackdrop.show { display: block; }
+	</style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC_Project</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+	<header>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 app-navbar">
+			<div class="container-fluid">
+				<button id="sidebarToggle" class="btn btn-outline-secondary me-2 border border-2" aria-label="Open menu">☰</button> 
+				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC Project</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+				        aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+					<ul class="navbar-nav flex-grow-1">
+						
+					</ul>
+					<ul class="navbar-nav ms-auto align-items-center">
+						@if (User?.Identity?.IsAuthenticated == true)
+						{
+							<li class="nav-item me-2">
+								<span class="navbar-text fw-semibold">
+									@User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value @User.FindFirst(System.Security.Claims.ClaimTypes.Surname)?.Value
+								</span>
+							</li>
+							<li class="nav-item">
+								<form asp-controller="Login" asp-action="Logout" method="post" class="d-inline">
+									<button type="submit" class="btn btn-outline-danger btn-sm">Log out</button>
+								</form>
+							</li>
+						}
+						else
+						{
+							<li class="nav-item">
+								<a class="btn btn-outline-primary btn-sm" asp-controller="Login" asp-action="Index">Log in</a>
+							</li>
+						}
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - MVC_Project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+	<!-- Backdrop -->
+	<div id="sidebarBackdrop"></div>
+
+	<!-- Slide-in Sidebar -->
+	<aside id="appSidebar" aria-hidden="true">
+		<h5 class="mb-3">Menu</h5>
+		<div class="list-group">
+			<a href="/Users/AllUsers" class="list-group-item list-group-item-action">All users</a>
+			<a href="/Users/AddUser" class="list-group-item list-group-item-action">Add user</a>
+			<a href="/Users/Edit" class="list-group-item list-group-item-action">Edit users</a>
+			<a href="/Users/DeleteUser/" class="list-group-item list-group-item-action">Delete users</a>
+		</div>
+	</aside>
+
+	<div class="container">
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
+	</div>
+
+	<footer class="border-top footer text-muted">
+		<!-- <div class="container">
+			&copy; 2025 - MVC_Project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+		</div> -->
+	</footer>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script>
+		// Sidebar functionality
+		(function() {
+			const sidebar = document.getElementById('appSidebar');
+			const toggleBtn = document.getElementById('sidebarToggle');
+			const backdrop = document.getElementById('sidebarBackdrop');
+			const navbar = document.querySelector('nav.app-navbar');
+
+			function setNavHeightVar() {
+				if (!navbar) return;
+				const h = navbar.offsetHeight || 56;
+				document.documentElement.style.setProperty('--nav-h', h + 'px');
+			}
+			setNavHeightVar();
+			window.addEventListener('resize', setNavHeightVar);
+
+			if (sidebar && toggleBtn && backdrop) {
+				function openSidebar() {
+					sidebar.classList.add('open');
+					backdrop.classList.add('show');
+					sidebar.setAttribute('aria-hidden', 'false');
+				}
+				function closeSidebar() {
+					sidebar.classList.remove('open');
+					backdrop.classList.remove('show');
+					sidebar.setAttribute('aria-hidden', 'true');
+				}
+				function toggleSidebar(e) {
+					if (e) e.preventDefault();
+					if (sidebar.classList.contains('open')) { closeSidebar(); } else { openSidebar(); }
+				}
+				toggleBtn.addEventListener('click', toggleSidebar);
+				backdrop.addEventListener('click', closeSidebar);
+				document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeSidebar(); });
+			}
+		})();
+	</script>
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
