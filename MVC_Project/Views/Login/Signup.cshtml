@@ -1,0 +1,51 @@
+@{
+    ViewData["Title"] = "Sign up";
+    Layout = "_LoginLayout";
+}
+
+<div class="d-flex align-items-center justify-content-center" style="min-height: 90vh; background-color: #f7f7f5;">
+    <div class="card shadow-sm" style="max-width: 480px; width: 100%; border-radius: 12px;">
+        <div class="card-body p-4 p-md-5">
+            <div id="signupContainer">
+                <h2 class="mb-2" style="font-weight: 700; font-size: 2rem;">Sign up</h2>
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <div>@error.ErrorMessage</div>
+                        }
+                    </div>
+                }
+
+                <form id="signupFormElement" method="post" action="/Login/Signup" novalidate>
+                    <div class="mb-3">
+                        <label for="signupName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="signupName" name="Name" required value="@Model?.Name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="signupLastname" class="form-label">Lastname</label>
+                        <input type="text" class="form-control" id="signupLastname" name="Lastname" required value="@Model?.Lastname">
+                    </div>
+                    <div class="mb-3">
+                        <label for="signupEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="signupEmail" name="Email" required value="@Model?.Email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="signupPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="signupPassword" name="Password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="signupConfirmPassword" name="ConfirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-teal w-100" style="background-color:#007c89; color:#fff; border-color:#007c89;">Sign up</button>
+                </form>
+                <p class="text-center mt-3" style="font-size: .95rem;">
+                    <a href="/Login/Index" class="link-primary text-decoration-underline">Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

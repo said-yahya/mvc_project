@@ -8,93 +8,31 @@
         <div class="card-body p-4 p-md-5">
             <div id="loginContainer">
                 <h2 class="mb-2" style="font-weight: 700; font-size: 2rem;">Log in</h2>
-                
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <div>@error.ErrorMessage</div>
+                        }
+                    </div>
+                }
+
                 <form id="loginFormElement" method="post" action="/Login/Login" novalidate>
                     <div class="mb-3">
                         <label for="loginEmail" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="loginEmail" name="Email" required>
+                        <input type="text" class="form-control" id="loginEmail" name="Email" required value="@Model?.Email">
                     </div>
-
                     <div class="mb-3 position-relative">
                         <label for="loginPassword" class="form-label">Password</label>
                         <div class="input-group">
                             <input type="password" class="form-control" id="loginPassword" name="Password" required>
-                            <!-- <button class="btn btn-outline-secondary" type="button" id="togglePassword" tabindex="-1">Show</button> -->
                         </div>
                     </div>
                     <button type="submit" class="btn btn-teal w-100" style="background-color:#007c89; color:#fff; border-color:#007c89;">Log in</button>
                 </form>
                 <p class="text-center mt-3" style="font-size: .95rem;">
-                    <a href="#" id="showSignup" class="link-primary text-decoration-underline">Sign up</a>
+                    <a href="/Login/Signup" class="link-primary text-decoration-underline">Sign up</a>
                 </p>
-            </div>
-            <div id="signupForm" style="display:none;" class="mt-4">
-                
-                <h5 class="mb-3">Create an account</h5>
-                <form id="signupFormElement" method="post" action="/Login/Signup">
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label for="signupName" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="signupName" name="Name" required>
-                        </div>
-                        <div class="col-12">
-                            <label for="signupLastname" class="form-label">Lastname</label>
-                            <input type="text" class="form-control" id="signupLastname" name="Lastname" required>
-                        </div>
-                        <div class="col-12">
-                            <label for="signupEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="signupEmail" name="Email" required>
-                        </div>
-                        <div class="col-12">
-                            <label for="signupPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="signupPassword" name="Password" required>
-                        </div>
-                        <div class="col-12">
-                            <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="signupConfirmPassword" name="ConfirmPassword" required>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success w-100 mt-3">Create account</button>
-                    <div class="text-center mt-2">
-                        <a href="#" id="showLogin" class="link-primary text-decoration-underline">Back to log in</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-@section Scripts {
-    <script>
-        // Toggle show/hide password
-        document.getElementById('togglePassword')?.addEventListener('click', function () {
-            const input = document.getElementById('loginPassword');
-            if (!input) return;
-            const isText = input.getAttribute('type') === 'text';
-            input.setAttribute('type', isText ? 'password' : 'text');
-            this.textContent = isText ? 'Show' : 'Hide';
-        });
-
-        // Toggle forms
-        document.getElementById('showSignup')?.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.getElementById('signupForm').style.display = 'block';
-            document.getElementById('loginContainer').style.display = 'none';
-        });
-        document.getElementById('showLogin')?.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.getElementById('signupForm').style.display = 'none';
-            document.getElementById('loginContainer').style.display = 'block';
-        });
-
-        // Simple confirm password check
-        document.getElementById('signupFormElement')?.addEventListener('submit', function (e) {
-            const pw = document.getElementById('signupPassword').value;
-            const cpw = document.getElementById('signupConfirmPassword').value;
-            if (pw !== cpw) {
-                e.preventDefault();
-                alert('Passwords do not match!');
-            }
-        });
-    </script>
-}
+            </div

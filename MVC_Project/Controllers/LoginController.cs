@@ -4,6 +4,7 @@ using MVC_Project.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MVC_Project.Controllers
 {
@@ -16,29 +17,34 @@ namespace MVC_Project.Controllers
             _context = context;
         }
 
-        // GET: /Login/
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (model.Email == null || model.Password == null)
+            if (string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.Password))
             {
-                return BadRequest("Email and password are required");
+                ModelState.AddModelError("", "Email and password are required");
+                return View("Index", model);
             }
 
             var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
 
-            if (user == null)
+            if (user is null)
             {
-                return BadRequest("User not found");
+                ModelState.AddModelError("", "User not found");
+                return View("Index", model);
             }
             else if (user.Password != model.Password)
             {
-                return BadRequest("Invalid password");
+                ModelState.AddModelError("", "Invalid password");
+                return View("Index", model);
             }
 
             // Create claims for the signed-in user
@@ -58,35 +64,57 @@ namespace MVC_Project.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Signup()
+        {
+            return View();
+        }
+
         // POST: /Login/Signup - Sadece signup formu buraya gelir
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Signup(RegisterViewModel model)
         {
             try
             {
-                if (model.Name == null || model.Lastname == null || model.Email == null || model.Password == null)
+                if (string.IsNullOrWhiteSpace(model.Name) ||
+                    string.IsNullOrWhiteSpace(model.Lastname) ||
+                    string.IsNullOrWhiteSpace(model.Email) ||
+                    string.IsNullOrWhiteSpace(model.Password) ||
+                    string.IsNullOrWhiteSpace(model.ConfirmPassword))
                 {
-                    return BadRequest("All fields are required");
+                    ModelState.AddModelError("", "All fields are required");
+                    return View("Signup", model);
                 }
 
-                // Check if user with this email already exists
+                if (model.Name.StartsWith(" ") || model.Lastname.StartsWith(" "))
+                {
+                    ModelState.AddModelError("", "Name and Lastname cannot start with a space.");
+                    return View("Signup", model);
+                }
+
+                if (model.Password != model.ConfirmPassword)
+                {
+                    ModelState.AddModelError("", "Passwords do not match.");
+                    return View("Signup", model);
+                }
+
                 var existingUser = _context.Users.FirstOrDefault(u => u.Email == model.Email);
-                if (existingUser != null)
+                if (existingUser is not null)
                 {
-                    Console.WriteLine($"User with email {model.Email} already exists");
-                    return RedirectToAction("Index", "Login");
+                    ModelState.AddModelError("", "User with this email already exists");
+                    return View("Signup", model);
                 }
 
-                // Create new user object
                 var newUser = new User
                 {
                     Name = model.Name,
                     Lastname = model.Lastname,
                     Email = model.Email,
-                    Password = model.Password // Note: In production, you should hash this password
+                    Password = model.Password
                 };
 
-                // Add user to database
                 _context.Users.Add(newUser);
                 _context.SaveChanges();
 
@@ -96,7 +124,8 @@ namespace MVC_Project.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine($"Signup error: {ex.Message}");
-                return RedirectToAction("Index", "Login");
+                ModelState.AddModelError("", "Error during signup");
+                return View("Signup", model);
             }
         }
 

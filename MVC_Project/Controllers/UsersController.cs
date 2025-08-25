@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using MVC_Project.Data;
 using MVC_Project.Models;
 
-
 namespace MVC_Project.Controllers
 {
     [Authorize]
+    [Route("[controller]/[action]")]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,56 +16,53 @@ namespace MVC_Project.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IActionResult AllUsers()
         {
             var users = _context.Users.ToList();
             return View(users);
         }
 
-        // GET: /Users/Edit - Show all users with edit options
+        [HttpGet]
         public IActionResult Edit()
         {
             var users = _context.Users.ToList();
             return View(users);
         }
 
-        // GET: /Users/Edit/{id} - Show edit form for specific user
+        [HttpPost]
         public IActionResult EditUser(int id)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
-            {
                 return NotFound();
-            }
             return View(user);
         }
 
-        // POST: /Users/Edit/{id} - Save changes for specific user
         [HttpPost]
         public IActionResult EditUser(int id, User user)
         {
             if (id != user.Id)
-            {
-                return NotFound();
-            }
+                return BadRequest();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(user);
+
+            try
             {
-                try
-                {
-                    _context.Update(user);
-                    _context.SaveChanges();
-                    return RedirectToAction(nameof(Edit));
-                }
-                catch
-                {
-                    // Handle error
-                    return View(user);
-                }
+                _context.Update(user);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Edit));
             }
-            return View(user);
+            catch (Exception ex)
+            {
+                // Log ex
+                ModelState.AddModelError("", "Error updating user.");
+                return View(user);
+            }
         }
 
+        [HttpGet]
         public IActionResult AddUser()
         {
             return View();
@@ -74,34 +71,34 @@ namespace MVC_Project.Controllers
         [HttpPost]
         public IActionResult AddUser(User user, string ConfirmPassword)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(user);
+
+            if (user.Password != ConfirmPassword)
             {
-                if (user.Password != ConfirmPassword)
-                {
-                    ModelState.AddModelError("", "Password do not match");
-                    return View(user);
-                }
+                ModelState.AddModelError("", "Passwords do not match.");
+                return View(user);
             }
 
             var existingUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
             if (existingUser != null)
             {
-                Console.WriteLine($"User with email {user.Email} already exists");
-                return RedirectToAction("AddUser", "Users");
+                ModelState.AddModelError("", "Email already exists.");
+                return View(user);
             }
 
             try
             {
                 _context.Users.Add(user);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(AllUsers));
             }
-            catch
+            catch (Exception ex)
             {
-                ModelState.AddModelError("", "Error saving user");
+                // Log ex
+                ModelState.AddModelError("", "Error saving user.");
                 return View(user);
             }
-
         }
 
         [HttpGet]
@@ -110,23 +107,23 @@ namespace MVC_Project.Controllers
             var users = _context.Users.ToList();
             return View(users);
         }
+
         [HttpPost]
         public IActionResult DeleteUser(int id)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == id);
             if (user == null)
-            {
                 return NotFound();
-            }
+
             try
             {
                 _context.Users.Remove(user);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(DeleteUser));
             }
-            catch
+            catch (Exception ex)
             {
-                // Handle error
+                // Log ex
                 return View("Error");
             }
         }
