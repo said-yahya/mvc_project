@@ -30,7 +30,7 @@ namespace MVC_Project.Controllers
             return View(users);
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult EditUser(int id)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == id);

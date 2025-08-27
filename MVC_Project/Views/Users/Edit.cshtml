@@ -35,7 +35,7 @@
                                             <td>@user.Lastname</td>
                                             <td>@user.Email</td>
                                             <td>
-                                                <a href="/Users/EditUser/@user.Id" class="btn btn-sm btn-outline-warning">Edit</a>
+                                                <a asp-controller="Users" asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-sm btn-outline-warning">Edit</a>
                                             </td>
                                         </tr>
                                     }

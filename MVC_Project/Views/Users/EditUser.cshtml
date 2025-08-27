@@ -11,7 +11,8 @@
                     <h4 class="card-title mb-0">Edit User: @Model.Name @Model.Lastname</h4>
                 </div>
                 <div class="card-body">
-                    <form asp-action="EditUser" method="post">
+                    <form asp-action="EditUser" asp-route-id="@Model.Id" method="post">
+                        <input type="hidden" asp-for="Id" />
                         <div class="mb-3">
                             <label asp-for="Name" class="form-label">Name</label>
                             <input asp-for="Name" class="form-control" required />

@@ -20,9 +20,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        // Fetch all users from the database
-        var users = _context.Users.ToList();
-        return View(users);
+        return View();
     }
 
     public IActionResult Privacy()

@@ -39,7 +39,7 @@
 		#sidebarBackdrop.show { display: block; }
 	</style>
 </head>
-<body>
+<body class="g-sidenav-show bg-gray-100">
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 app-navbar">
 			<div class="container-fluid">
@@ -93,7 +93,8 @@
 		</div>
 	</aside>
 
-	<div class="container">
+
+	<div class="container-fluid py-4">
 		<main role="main" class="pb-3">
 			@RenderBody()
 		</main>
