@@ -3,6 +3,7 @@ using MVC_Project.Data;
 using MVC_Project.Controllers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.FileProviders;
+using MVC_Project.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Login";
         options.SlidingExpiration = true;
     });
+
+// Alpha Vantage service
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient<AlphaVantageService>();
 
 var app = builder.Build();
 

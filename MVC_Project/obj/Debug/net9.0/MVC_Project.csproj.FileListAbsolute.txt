@@ -508,3 +508,4 @@
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/MVC_Project.genruntimeconfig.cache
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/ref/MVC_Project.dll
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/dashboard-master/package.json
+/Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/Newtonsoft.Json.dll
