@@ -27,6 +27,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient<AlphaVantageService>();
 
+// Weather service
+builder.Services.AddHttpClient<WeatherService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

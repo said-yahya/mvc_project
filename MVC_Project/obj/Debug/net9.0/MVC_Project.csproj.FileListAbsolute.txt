@@ -495,8 +495,6 @@
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/kcsltm9jxr-muycvpuwrr.gz
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/mtdmitvl1v-87fc7y1x7t.gz
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/jrk00lgm1d-mlv21k5csn.gz
-/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/tafbvzqeb4-kt5ph977zz.gz
-/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/5jcqdet994-kt5ph977zz.gz
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/staticwebassets.build.json
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/staticwebassets.build.json.cache
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/staticwebassets.development.json
@@ -509,3 +507,5 @@
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/ref/MVC_Project.dll
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/dashboard-master/package.json
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/Newtonsoft.Json.dll
+/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/tafbvzqeb4-333ce7qst2.gz
+/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/5jcqdet994-333ce7qst2.gz
