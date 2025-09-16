@@ -78,32 +78,69 @@ namespace MVC_Project.Controllers
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(model.Name) ||
-                    string.IsNullOrWhiteSpace(model.Lastname) ||
-                    string.IsNullOrWhiteSpace(model.Email) ||
-                    string.IsNullOrWhiteSpace(model.Password) ||
-                    string.IsNullOrWhiteSpace(model.ConfirmPassword))
+                // Field-specific validations
+                if (string.IsNullOrWhiteSpace(model.Name))
                 {
-                    ModelState.AddModelError("", "All fields are required");
-                    return View("Signup", model);
+                    ModelState.AddModelError(nameof(model.Name), "The Name field is required.");
+                }
+                else if (model.Name.StartsWith(" "))
+                {
+                    ModelState.AddModelError(nameof(model.Name), "Name cannot start with a space.");
                 }
 
-                if (model.Name.StartsWith(" ") || model.Lastname.StartsWith(" "))
+                if (string.IsNullOrWhiteSpace(model.Lastname))
                 {
-                    ModelState.AddModelError("", "Name and Lastname cannot start with a space.");
-                    return View("Signup", model);
+                    ModelState.AddModelError(nameof(model.Lastname), "The Lastname field is required.");
+                }
+                else if (model.Lastname.StartsWith(" "))
+                {
+                    ModelState.AddModelError(nameof(model.Lastname), "Lastname cannot start with a space.");
                 }
 
-                if (model.Password != model.ConfirmPassword)
+                if (string.IsNullOrWhiteSpace(model.Email))
                 {
-                    ModelState.AddModelError("", "Passwords do not match.");
-                    return View("Signup", model);
+                    ModelState.AddModelError(nameof(model.Email), "The Email field is required.");
+                }
+                else
+                {
+                    // Basic email validation
+                    if (!model.Email.Contains("@") || !model.Email.Contains("."))
+                    {
+                        ModelState.AddModelError(nameof(model.Email), "The Email field is not a valid e-mail address.");
+                    }
+                    else
+                    {
+                        var existingUser = _context.Users.FirstOrDefault(u => u.Email == model.Email);
+                        if (existingUser is not null)
+                        {
+                            ModelState.AddModelError(nameof(model.Email), "User with this email already exists.");
+                        }
+                    }
                 }
 
-                var existingUser = _context.Users.FirstOrDefault(u => u.Email == model.Email);
-                if (existingUser is not null)
+                if (string.IsNullOrWhiteSpace(model.Password))
                 {
-                    ModelState.AddModelError("", "User with this email already exists");
+                    ModelState.AddModelError(nameof(model.Password), "The Password field is required.");
+                }
+                else if (model.Password.StartsWith(" "))
+                {
+                    ModelState.AddModelError(nameof(model.Password), "Password cannot start with a space.");
+                }
+                else if (model.Password.Contains(" "))
+                {
+                    ModelState.AddModelError(nameof(model.Password), "Password cannot contain spaces.");
+                }
+                if (string.IsNullOrWhiteSpace(model.ConfirmPassword))
+                {
+                    ModelState.AddModelError(nameof(model.ConfirmPassword), "The ConfirmPassword field is required.");
+                }
+                else if (model.Password != model.ConfirmPassword)
+                {
+                    ModelState.AddModelError(nameof(model.ConfirmPassword), "Passwords do not match.");
+                }
+
+                if (!ModelState.IsValid)
+                {
                     return View("Signup", model);
                 }
 
@@ -124,10 +161,11 @@ namespace MVC_Project.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine($"Signup error: {ex.Message}");
-                ModelState.AddModelError("", "Error during signup");
+                ModelState.AddModelError("", "An unexpected error occurred during signup.");
                 return View("Signup", model);
             }
         }
+        
 
         [HttpPost]
         public async Task<IActionResult> Logout()

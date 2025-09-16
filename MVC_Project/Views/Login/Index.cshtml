@@ -3,36 +3,87 @@
     Layout = "_LoginLayout";
 }
 
-<div class="d-flex align-items-center justify-content-center" style="min-height: 90vh; background-color: #f7f7f5;">
-    <div class="card shadow-sm" style="max-width: 480px; width: 100%; border-radius: 12px;">
-        <div class="card-body p-4 p-md-5">
-            <div id="loginContainer">
-                <h2 class="mb-2" style="font-weight: 700; font-size: 2rem;">Log in</h2>
+<div class="d-flex align-items-center justify-content-center" style="min-height: 100vh; background-color: #f7f7f5;">
+    <div class="container px-3">
+        <div class="card shadow-sm mx-auto" style="max-width: 480px; border-radius: 12px;">
+            <div class="card-body p-4 p-md-5">
+                <div id="loginContainer">
+                    <h2 class="mb-3 fw-bold text-center">Log in</h2>
 
-                @if (!ViewData.ModelState.IsValid)
-                {
-                    <div class="alert alert-danger" role="alert">
-                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                        {
-                            <div>@error.ErrorMessage</div>
-                        }
-                    </div>
-                }
-
-                <form id="loginFormElement" method="post" action="/Login/Login" novalidate>
-                    <div class="mb-3">
-                        <label for="loginEmail" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="loginEmail" name="Email" required value="@Model?.Email">
-                    </div>
-                    <div class="mb-3 position-relative">
-                        <label for="loginPassword" class="form-label">Password</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="loginPassword" name="Password" required>
+                    @* Show only model-level errors here (not field-specific) *@
+                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""]?.Errors?.Count > 0)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @foreach (var error in ViewData.ModelState[""].Errors)
+                            {
+                                <div>@error.ErrorMessage</div>
+                            }
                         </div>
-                    </div>
-                    <button type="submit" class="btn btn-teal w-100" style="background-color:#007c89; color:#fff; border-color:#007c89;">Log in</button>
-                </form>
-                <p class="text-center mt-3" style="font-size: .95rem;">
-                    <a href="/Login/Signup" class="link-primary text-decoration-underline">Sign up</a>
-                </p>
-            </div
+                    }
+
+                    <form id="loginFormElement" method="post" action="/Login/Login" novalidate>
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email</label>
+                            <input type="text" 
+                                   class="form-control @(ViewData.ModelState["Email"]?.Errors?.Count > 0 ? "is-invalid" : "")" 
+                                   id="loginEmail" 
+                                   name="Email" 
+                                   required 
+                                   value="@Model?.Email">
+                            @if (ViewData.ModelState["Email"]?.Errors?.Count > 0)
+                            {
+                                <div class="field-validation-error">
+                                    @ViewData.ModelState["Email"].Errors[0].ErrorMessage
+                                </div>
+                            }
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <div class="input-group">
+                                <input type="password" 
+                                       class="form-control @(ViewData.ModelState["Password"]?.Errors?.Count > 0 ? "is-invalid" : "")" 
+                                       id="loginPassword" 
+                                       name="Password" 
+                                       required>
+                                <button class="btn btn-outline-secondary" type="button" id="toggleLoginPassword">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            @if (ViewData.ModelState["Password"]?.Errors?.Count > 0)
+                            {
+                                <div class="field-validation-error">
+                                    @ViewData.ModelState["Password"].Errors[0].ErrorMessage
+                                </div>
+                            }
+                        </div>
+                        <button type="submit" class="btn w-100" style="background-color:#007c89; color:#fff; border-color:#007c89;">
+                            Log in
+                        </button>
+                    </form>
+
+                    <p class="text-center mt-3" style="font-size: .95rem;">
+                        <a href="/Login/Signup" class="link-primary text-decoration-underline">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function(){
+    const toggleBtn = document.getElementById('toggleLoginPassword');
+    const pwd = document.getElementById('loginPassword');
+    if (toggleBtn && pwd){
+        toggleBtn.addEventListener('click', function(){
+            const t = pwd.getAttribute('type') === 'password' ? 'text' : 'password';
+            pwd.setAttribute('type', t);
+            // swap icon if Bootstrap Icons exists
+            const i = this.querySelector('i');
+            if (i){ i.className = (t === 'password') ? 'bi bi-eye' : 'bi bi-eye-slash'; }
+        });
+    }
+})();
+</script>
+}

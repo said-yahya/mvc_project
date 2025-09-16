@@ -3,49 +3,159 @@
     Layout = "_LoginLayout";
 }
 
-<div class="d-flex align-items-center justify-content-center" style="min-height: 90vh; background-color: #f7f7f5;">
-    <div class="card shadow-sm" style="max-width: 480px; width: 100%; border-radius: 12px;">
-        <div class="card-body p-4 p-md-5">
-            <div id="signupContainer">
-                <h2 class="mb-2" style="font-weight: 700; font-size: 2rem;">Sign up</h2>
+<div class="d-flex align-items-center justify-content-center" style="min-height: 100vh; background-color: #f7f7f5;">
+    <div class="container px-3">
+        <div class="card shadow-sm mx-auto" style="max-width: 480px; border-radius: 12px;">
+            <div class="card-body p-4 p-md-5">
+                <div id="signupContainer">
+                    <h2 class="mb-3 fw-bold text-center">Sign up</h2>
 
-                @if (!ViewData.ModelState.IsValid)
-                {
-                    <div class="alert alert-danger" role="alert">
-                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                        {
-                            <div>@error.ErrorMessage</div>
-                        }
-                    </div>
-                }
+                    <!-- Only show general errors (non-field specific) -->
+                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""]?.Errors?.Count > 0)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @foreach (var error in ViewData.ModelState[""].Errors)
+                            {
+                                <div>@error.ErrorMessage</div>
+                            }
+                        </div>
+                    }
 
-                <form id="signupFormElement" method="post" action="/Login/Signup" novalidate>
-                    <div class="mb-3">
-                        <label for="signupName" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="signupName" name="Name" required value="@Model?.Name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="signupLastname" class="form-label">Lastname</label>
-                        <input type="text" class="form-control" id="signupLastname" name="Lastname" required value="@Model?.Lastname">
-                    </div>
-                    <div class="mb-3">
-                        <label for="signupEmail" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="signupEmail" name="Email" required value="@Model?.Email">
-                    </div>
-                    <div class="mb-3">
-                        <label for="signupPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="signupPassword" name="Password" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="signupConfirmPassword" name="ConfirmPassword" required>
-                    </div>
-                    <button type="submit" class="btn btn-teal w-100" style="background-color:#007c89; color:#fff; border-color:#007c89;">Sign up</button>
-                </form>
-                <p class="text-center mt-3" style="font-size: .95rem;">
-                    <a href="/Login/Index" class="link-primary text-decoration-underline">Login</a>
-                </p>
+                    <form id="signupFormElement" method="post" action="/Login/Signup" novalidate>
+                        <div class="mb-3">
+                            <label for="signupName" class="form-label">Name</label>
+                            <input type="text" 
+                                   class="form-control @(ViewData.ModelState["Name"]?.Errors?.Count > 0 ? "is-invalid" : "")" 
+                                   id="signupName" 
+                                   name="Name" 
+                                   required 
+                                   value="@Model?.Name">
+                            @if (ViewData.ModelState["Name"]?.Errors?.Count > 0)
+                            {
+                                <div class="field-validation-error">
+                                    @ViewData.ModelState["Name"].Errors[0].ErrorMessage
+                                </div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="signupLastname" class="form-label">Lastname</label>
+                            <input type="text" 
+                                   class="form-control @(ViewData.ModelState["Lastname"]?.Errors?.Count > 0 ? "is-invalid" : "")" 
+                                   id="signupLastname" 
+                                   name="Lastname" 
+                                   required 
+                                   value="@Model?.Lastname">
+                            @if (ViewData.ModelState["Lastname"]?.Errors?.Count > 0)
+                            {
+                                <div class="field-validation-error">
+                                    @ViewData.ModelState["Lastname"].Errors[0].ErrorMessage
+                                </div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="signupEmail" class="form-label">Email</label>
+                            <input type="email" 
+                                   class="form-control @(ViewData.ModelState["Email"]?.Errors?.Count > 0 ? "is-invalid" : "")" 
+                                   id="signupEmail" 
+                                   name="Email" 
+                                   required 
+                                   value="@Model?.Email">
+                            @if (ViewData.ModelState["Email"]?.Errors?.Count > 0)
+                            {
+                                <div class="field-validation-error">
+                                    @ViewData.ModelState["Email"].Errors[0].ErrorMessage
+                                </div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="signupPassword" class="form-label">Password</label>
+                            <div class="input-group">
+                                <input type="password" 
+                                    class="form-control @(ViewData.ModelState["Password"]?.Errors?.Count > 0 ? "is-invalid" : "")" 
+                                    id="signupPassword" 
+                                    name="Password" 
+                                    required 
+                                    value="@Model?.Password">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            @if (ViewData.ModelState["Password"]?.Errors?.Count > 0)
+                            {
+                                <div class="field-validation-error">
+                                    @ViewData.ModelState["Password"].Errors[0].ErrorMessage
+                                </div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
+                            <div class="input-group">
+                                <input type="password" 
+                                    class="form-control @(ViewData.ModelState["ConfirmPassword"]?.Errors?.Count > 0 ? "is-invalid" : "")" 
+                                    id="signupConfirmPassword" 
+                                    name="ConfirmPassword" 
+                                    required 
+                                    value="@Model?.ConfirmPassword">
+                                <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            @if (ViewData.ModelState["ConfirmPassword"]?.Errors?.Count > 0)
+                            {
+                                <div class="field-validation-error">
+                                    @ViewData.ModelState["ConfirmPassword"].Errors[0].ErrorMessage
+                                </div>
+                            }
+                        </div>
+
+                        <button type="submit" class="btn w-100" style="background-color:#007c89; color:#fff; border-color:#007c89;">
+                            Sign up
+                        </button>
+                    </form>
+
+                    <p class="text-center mt-3" style="font-size: .95rem;">
+                        <a href="/Login/Index" class="link-primary text-decoration-underline">Login</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Password field toggle
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const input = document.getElementById("signupPassword");
+            const icon = this.querySelector("i");
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            }
+        });
+
+        // Confirm Password field toggle
+        document.getElementById("toggleConfirmPassword").addEventListener("click", function () {
+            const input = document.getElementById("signupConfirmPassword");
+            const icon = this.querySelector("i");
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            }
+        });
+    </script>
+}

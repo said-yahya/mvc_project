@@ -1,181 +1,382 @@
-﻿@{
+﻿@model IReadOnlyList<MVC_Project.Models.WeatherRow>
+@{
     ViewData["Title"] = "Dashboard";
- 
 }
 
-<div class="row">
-    <div class="col-lg-8 mb-4">
-        <div class="card z-index-2 h-100">
-            <div class="card-header pb-0 pt-3 d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="text-capitalize mb-0">Stock overview</h6>
-                    <p class="text-sm mb-0"><span id="stockSymbol" class="font-weight-bold">MSFT</span> • <span id="stockRange">1D</span> • <span id="stockChange"></span></p>
-                </div>
-                <div class="btn-group" role="group" aria-label="Range">
-                    <button class="btn btn-sm btn-outline-primary" data-range="1D">1D</button>
-                    <button class="btn btn-sm btn-outline-primary" data-range="1W">1W</button>
-                    <button class="btn btn-sm btn-outline-primary" data-range="1M">1M</button>
-                </div>
-            </div>
-            <div class="card-body p-3">
-                <div class="chart">
-                    <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="card h-100">
-            <div class="card-header pb-0">
-                <h6>Popular stocks (today)</h6>
-            </div>
-            <div class="card-body px-0 pt-0 pb-2">
-                <div class="table-responsive p-0">
-                    <table class="table align-items-center mb-0">
-                        <thead>
-                            <tr>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Symbol</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Change</th>
-                            </tr>
-                        </thead>
-                        <tbody id="popularBody">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- TOP PANEL: Weather Dashboard -->
+<div class="container">
+        <div class="row">
+        <div class="container">
+            <div class="row mb-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header pb-2">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <h6 class="mb-0">Weather Dashboard</h6>
+                            </div>
+                            <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="text" id="citySearch" class="form-control" 
+                                            placeholder="Enter city name" style="height:50px; font-size:16px;" />
+                                            <button class="btn btn-primary" type="button" id="searchBtn" 
+                                                    style="height:50px; font-size:16px; padding:0 20px;">
+                                                <img src="~/images/search.svg" alt="search" style="width: 20px; height: 20px;">
+                                            </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3" id="weatherDashboard" style="display: none;">
+                        <!-- Main Weather Card -->
+                        <div class="row g-3">
+                            <div class="col-lg-3">
+                                <div class="card bg-gradient-primary text-white">
+                                    <div class="card-body text-center p-3">
+                                        <div class="weather-icon mb-2">
+                                            <img id="weatherIcon" src="" alt="Weather" style="width: 50px; height: 50px;" />
+                                        </div>
+                                        <h2 id="mainTemp" class="mb-1">--°C</h2>
+                                        <h6 id="weatherCondition" class="mb-1">--</h6>
+                                        <small id="locationInfo" class="mb-0">--</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="card bg-gradient-info text-white">
+                                            <div class="card-body text-center p-2">
+                                                <i class="ni ni-cloud-rain-48 text-sm opacity-10"></i>
+                                                <h5 id="precipPercent" class="mb-0">--%</h5>
+                                                <small>Precipitation</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card bg-gradient-success text-white">
+                                            <div class="card-body text-center p-2">
+                                                <i class="ni ni-droplet-48 text-sm opacity-10"></i>
+                                                <h5 id="humidityPercent" class="mb-0">--%</h5>
+                                                <small>Humidity</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card bg-gradient-warning text-white">
+                                            <div class="card-body text-center p-2">
+                                                <i class="ni ni-world-2 text-sm opacity-10"></i>
+                                                <h5 id="windSpeed" class="mb-0">-- km/h</h5>
+                                                <small>Wind Speed</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
+                        <!-- Navigation Tabs -->
+                        <div class="row mb-3 mt-3">
+                            <div class="col-12">
+                                <ul class="nav nav-tabs nav-tabs-sm" id="weatherTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="temp-tab" data-bs-toggle="tab" data-bs-target="#temp-chart" type="button" role="tab">
+                                            Temperature
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="precip-tab" data-bs-toggle="tab" data-bs-target="#precip-chart" type="button" role="tab">
+                                            Precipitation
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="wind-tab" data-bs-toggle="tab" data-bs-target="#wind-chart" type="button" role="tab">
+                                            Wind
+                                        </button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="weatherTabContent">
+                                    <div class="tab-pane fade show active" id="temp-chart" role="tabpanel">
+                                        <div class="card">
+                                            <div class="card-body p-2">
+                                                <canvas id="tempChart" height="150" style="max-height: 150px;"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <div class="tab-pane fade" id="precip-chart" role="tabpanel">
+                        <div class="card">
+                                            <div class="card-body p-2">
+                                                <canvas id="precipChart" height="150" style="max-height: 150px;"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="wind-chart" role="tabpanel">
+                                        <div class="card">
+                                            <div class="card-body p-2">
+                                                <canvas id="windChart" height="150" style="max-height: 150px;"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 7-Day Forecast -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card px-2">
+                                    <div class="card-header pb-2">
+                                        <h6 class="mb-0">7-Day Forecast</h6>
+                                    </div>
+                                    <div class="card-body p-2">
+                                        <div class="row" id="weeklyForecast">
+                                            <!-- Forecast days will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM PANEL: City Table -->
+        <div class="container">
+            <div class="row mb-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header pb-2">
+                        <h6 class="mb-0">Turkey Weather</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive">
+                            <table class="table table-sm align-items-center mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">City</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Temperature (°C)</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Humidity (%)</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Precipitation (mm)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var r in Model)
+                                        {
+                                            <tr>
+                                            <td><span class="text-xs font-weight-bold">@r.City</span></td>
+                                            <td><span class="text-xs">@r.Date.ToString("yyyy-MM-dd HH:mm")</span></td>
+                                            <td><span class="text-xs">@r.TemperatureC</span></td>
+                                            <td><span class="text-xs">@r.Humidity</span></td>
+                                            <td><span class="text-xs">@r.PrecipitationMm</span></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    </div>
+    
+</div>
 @section Scripts {
 <script>
 (function(){
-    const ctx = document.getElementById('chart-line').getContext('2d');
-    let chart;
-    const symbolEl = document.getElementById('stockSymbol');
-    const rangeEl = document.getElementById('stockRange');
-    let currentSymbol = 'MSFT';
-    let currentRange = '1D';
+    let charts = {};
+    let currentCity = '';
 
-    async function fetchSeries(symbol, range){
-        const url = `/Home/Range?symbol=${encodeURIComponent(symbol)}&range=${encodeURIComponent(range)}`;
-        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-        if(!res.ok) throw new Error('Failed to fetch series');
-        return await res.json();
+    // Initialize search functionality
+    const searchBtn = document.getElementById('searchBtn');
+    const citySearch = document.getElementById('citySearch');
+    const weatherDashboard = document.getElementById('weatherDashboard');
+
+    // Search button click handler
+    searchBtn.addEventListener('click', () => {
+        const city = citySearch.value.trim();
+        if (city) {
+            loadWeatherData(city);
+        }
+    });
+
+    // Enter key handler
+    citySearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const city = citySearch.value.trim();
+            if (city) {
+                loadWeatherData(city);
+            }
+        }
+    });
+
+    // Load weather data for a city
+    async function loadWeatherData(city) {
+        try {
+            currentCity = city;
+            weatherDashboard.style.display = 'block';
+            
+            // Load current weather
+            const currentRes = await fetch(`/Home/Current?city=${encodeURIComponent(city)}`);
+            if (currentRes.ok) {
+                const currentData = await currentRes.json();
+                updateMainWeather(currentData);
+            }
+
+            // Load hourly data for charts
+            const hourlyRes = await fetch(`/Home/Hourly?city=${encodeURIComponent(city)}`);
+            if (hourlyRes.ok) {
+                const hourlyData = await hourlyRes.json();
+                updateCharts(hourlyData);
+            }
+
+            // Load weekly forecast
+            const weeklyRes = await fetch(`/Home/Weekly?city=${encodeURIComponent(city)}`);
+            if (weeklyRes.ok) {
+                const weeklyData = await weeklyRes.json();
+                updateWeeklyForecast(weeklyData);
+            }
+        } catch (error) {
+            console.error('Error loading weather data:', error);
+        }
     }
 
-    function toDataset(series){
-        const labels = series.points.map(p => new Date(p.timestamp));
-        const data = series.points.map(p => p.close);
-        return { labels, data };
+    // Update main weather card
+    function updateMainWeather(data) {
+        document.getElementById('mainTemp').textContent = `${data.temperatureC}°C`;
+        document.getElementById('weatherCondition').textContent = data.condition;
+        document.getElementById('locationInfo').textContent = `${data.city}, ${new Date(data.lastUpdated).toLocaleDateString()}`;
+        document.getElementById('precipPercent').textContent = `${data.precipitationMm > 0 ? 'Yes' : 'No'}`;
+        document.getElementById('humidityPercent').textContent = `${data.humidity}%`;
+        document.getElementById('windSpeed').textContent = `${data.windSpeedKmh} km/h`;
+        
+        // Update weather icon
+        const icon = document.getElementById('weatherIcon');
+        if (data.conditionIcon) {
+            icon.src = `https:${data.conditionIcon}`;
+        }
     }
 
-    function renderChart(dataset){
-        const data = {
-            labels: dataset.labels,
-            datasets: [{
-                label: `${currentSymbol}`,
-                tension: 0.4,
-                borderWidth: 3,
-                pointRadius: 0,
-                borderColor: '#5e72e4',
-                backgroundColor: 'rgba(94,114,228,0.1)',
-                fill: true,
-                data: dataset.data
-            }]
-        };
-        const options = {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { x: { ticks: { callback: (v, i)=>{ const d = data.labels[i]; return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); } } } }
-        };
-        if(chart){ chart.destroy(); }
-        chart = new Chart(ctx, { type: 'line', data, options });
+    // Update charts
+    function updateCharts(hourlyData) {
+        const times = hourlyData.map(d => d.time);
+        const temps = hourlyData.map(d => d.temperature);
+        const precip = hourlyData.map(d => d.precipitation);
+        const wind = hourlyData.map(d => d.windSpeed);
+
+        // Temperature chart
+        updateChart('tempChart', times, temps, 'Temperature (°C)', '#ff6b35', 'rgba(255, 107, 53, 0.1)');
+        
+        // Precipitation chart
+        updateChart('precipChart', times, precip, 'Precipitation (mm)', '#4ecdc4', 'rgba(78, 205, 196, 0.1)');
+        
+        // Wind chart
+        updateChart('windChart', times, wind, 'Wind Speed (km/h)', '#45b7d1', 'rgba(69, 183, 209, 0.1)');
     }
 
-    async function load(symbol, range){
-        symbolEl.textContent = symbol;
-        rangeEl.textContent = range;
-        const series = await fetchSeries(symbol, range);
-        renderChart(toDataset(series));
-        updateChange(series);
+    // Update individual chart
+    function updateChart(canvasId, labels, data, label, borderColor, backgroundColor) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        
+        if (charts[canvasId]) {
+            charts[canvasId].destroy();
+        }
+
+        charts[canvasId] = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: label,
+                    data: data,
+                    borderColor: borderColor,
+                    backgroundColor: backgroundColor,
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointBackgroundColor: borderColor
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.1)'
+                        },
+                        ticks: {
+                            font: {
+                                size: 10
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(0,0,0,0.1)'
+                        },
+                        ticks: {
+                            font: {
+                                size: 10
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
-    function updateChange(series){
-        const el = document.getElementById('stockChange');
-        if (!series || !series.points || series.points.length < 2){ el.textContent = ''; return; }
-        const first = series.points[0].close;
-        const last = series.points[series.points.length - 1].close;
-        const pct = ((last - first) / first) * 100;
-        const sign = pct >= 0 ? '+' : '';
-        const color = pct >= 0 ? 'text-success' : 'text-danger';
-        el.className = color;
-        el.textContent = `${sign}${pct.toFixed(2)}%`;
+    // Update weekly forecast
+    function updateWeeklyForecast(weeklyData) {
+        const container = document.getElementById('weeklyForecast');
+        container.innerHTML = '';
+
+        weeklyData.forEach(day => {
+            const dayCard = document.createElement('div');
+            dayCard.className = 'col-md-1 col-6 mb-2';
+            dayCard.innerHTML = `
+                <div class="card text-center">
+                    <div class="card-body p-1">
+                        <h6 class="text-xs font-weight-bold mb-1">${day.dayName}</h6>
+                        <img src="https:${day.conditionIcon}" alt="${day.condition}" style="width: 25px; height: 25px;" class="mb-1" />
+                        <div class="text-xs">
+                            <div class="text-danger">${day.highTemp}°</div>
+                            <div class="text-info">${day.lowTemp}°</div>
+                        </div>
+                    </div>
+    </div>
+            `;
+            container.appendChild(dayCard);
+        });
     }
 
-    document.querySelectorAll('[data-range]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-            document.querySelectorAll('[data-range]').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentRange = btn.getAttribute('data-range');
-            await load(currentSymbol, currentRange);
+    // Tab switching with smooth transitions
+    document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+        tab.addEventListener('shown.bs.tab', (e) => {
+            // Add smooth transition effect
+            const target = document.querySelector(e.target.getAttribute('data-bs-target'));
+            target.style.opacity = '0';
+            setTimeout(() => {
+                target.style.opacity = '1';
+            }, 50);
         });
     });
 
-    // Navbar search -> update symbol
-    const search = document.getElementById('navbarSearch');
-    if (search){
-        async function doSearch(){
-            const raw = (search.value || '').trim();
-            if (!raw) return;
-            // Try resolve name to symbol first
-            let symbol = raw.toUpperCase();
-            try {
-                const r = await fetch(`/Home/Resolve?q=${encodeURIComponent(raw)}`);
-                if (r.ok){
-                    const j = await r.json();
-                    if (j.symbol) symbol = j.symbol;
-                }
-            } catch(e) {}
-            currentSymbol = symbol;
-            await load(currentSymbol, currentRange);
-        }
-        search.addEventListener('keydown', async (e) => {
-            if (e.key === 'Enter'){
-                e.preventDefault();
-                await doSearch();
-            }
-        });
-        // click on loupe triggers search too
-        const loupe = search.previousElementSibling;
-        if (loupe){
-            loupe.addEventListener('click', async () => { await doSearch(); });
-        }
-    }
-
-    async function loadPopular(){
-        const res = await fetch('/Home/Popular', { headers: { 'Accept': 'application/json' } });
-        if(!res.ok) return;
-        const rows = await res.json();
-        const body = document.getElementById('popularBody');
-        body.innerHTML = '';
-        rows.forEach(r => {
-            const tr = document.createElement('tr');
-            const pct = Number(r.changePercent);
-            const sign = pct >= 0 ? '+' : '';
-            const color = pct >= 0 ? 'text-success' : 'text-danger';
-            tr.innerHTML = `<td><span class="text-xs font-weight-bold">${r.symbol}</span></td><td><span class="text-xs">$${Number(r.price).toFixed(2)}</span></td><td><span class="text-xs ${color}">${sign}${pct.toFixed(2)}%</span></td>`;
-            body.appendChild(tr);
-        });
-    }
-
-    // initial
-    // set default active 1D
-    const defaultBtn = document.querySelector('[data-range="1D"]');
-    if (defaultBtn) defaultBtn.classList.add('active');
-    load(currentSymbol, currentRange).catch(console.error);
-    loadPopular().catch(console.error);
 })();
 </script>
-}
+} 
+

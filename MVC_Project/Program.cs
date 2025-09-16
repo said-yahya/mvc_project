@@ -23,9 +23,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.SlidingExpiration = true;
     });
 
-// Alpha Vantage service
+// Memory cache for weather data
 builder.Services.AddMemoryCache();
-builder.Services.AddHttpClient<AlphaVantageService>();
 
 // Weather service
 builder.Services.AddHttpClient<WeatherService>();
