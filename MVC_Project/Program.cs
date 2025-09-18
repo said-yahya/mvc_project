@@ -23,15 +23,21 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.SlidingExpiration = true;
     });
 
+// TELEGRAM BOT SERVİSLERİ (LOCALHOST İÇİN)
+builder.Services.AddScoped<ITelegramBotService, TelegramBotService>();
+builder.Services.AddHostedService<TelegramPollingService>();
+
+// WEATHER SERVICE (Mevcut)
+builder.Services.AddHttpClient<WeatherService>();
+
 // Memory cache for weather data
 builder.Services.AddMemoryCache();
 
-// Weather service
-builder.Services.AddHttpClient<WeatherService>();
+// BU SATIRLARI SİLİN - GEREKSIZ:
+// builder.Services.AddScoped<IWeatherService, MockWeatherService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -61,6 +67,5 @@ app.MapStaticAssets();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Index}/{id?}");
-
 
 app.Run();

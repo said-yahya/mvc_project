@@ -254,8 +254,9 @@
 /Users/macbook/Desktop/C#/MVC_Project/obj/Debug/net9.0/compressed/hkznywedq7-7e3pzrxen9.gz
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/appsettings.Development.json
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/appsettings.json
-/Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/MVC_Project.staticwebassets.endpoints.json
+/Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/dashboard-master/package.json
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/MVC_Project.staticwebassets.runtime.json
+/Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/MVC_Project.staticwebassets.endpoints.json
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/MVC_Project
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/MVC_Project.deps.json
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/MVC_Project.runtimeconfig.json
@@ -301,6 +302,7 @@
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/Microsoft.SqlServer.Server.dll
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/Microsoft.Win32.SystemEvents.dll
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/Mono.TextTemplating.dll
+/Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/Newtonsoft.Json.dll
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/SQLitePCLRaw.batteries_v2.dll
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/SQLitePCLRaw.core.dll
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/SQLitePCLRaw.provider.e_sqlite3.dll
@@ -319,6 +321,7 @@
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/System.Security.Cryptography.ProtectedData.dll
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/System.Security.Permissions.dll
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/System.Windows.Extensions.dll
+/Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/Telegram.Bot.dll
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/cs/Microsoft.CodeAnalysis.resources.dll
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/de/Microsoft.CodeAnalysis.resources.dll
 /Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/es/Microsoft.CodeAnalysis.resources.dll
@@ -435,6 +438,9 @@
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/scopedcss/projectbundle/MVC_Project.bundle.scp.css
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/hkznywedq7-7e3pzrxen9.gz
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/4wyqst0w3p-61n19gt1b8.gz
+/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/r1nl2lcica-qgb7hfbgfm.gz
+/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/6ihu9lkfi9-090umcd0xl.gz
+/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/qhvfbepvbz-tuf62hfhj4.gz
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/n4rpicl2q4-xtxxf3hu2r.gz
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/dvinncoy9i-bqjiyaj88i.gz
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/9twyvnrhgu-c2jlpeoesf.gz
@@ -495,6 +501,8 @@
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/kcsltm9jxr-muycvpuwrr.gz
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/mtdmitvl1v-87fc7y1x7t.gz
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/jrk00lgm1d-mlv21k5csn.gz
+/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/tafbvzqeb4-333ce7qst2.gz
+/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/5jcqdet994-333ce7qst2.gz
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/staticwebassets.build.json
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/staticwebassets.build.json.cache
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/staticwebassets.development.json
@@ -505,10 +513,3 @@
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/MVC_Project.pdb
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/MVC_Project.genruntimeconfig.cache
 /Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/ref/MVC_Project.dll
-/Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/dashboard-master/package.json
-/Users/macbook/Desktop/MVC_Project/MVC_Project/bin/Debug/net9.0/Newtonsoft.Json.dll
-/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/tafbvzqeb4-333ce7qst2.gz
-/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/5jcqdet994-333ce7qst2.gz
-/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/r1nl2lcica-qgb7hfbgfm.gz
-/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/6ihu9lkfi9-090umcd0xl.gz
-/Users/macbook/Desktop/MVC_Project/MVC_Project/obj/Debug/net9.0/compressed/qhvfbepvbz-tuf62hfhj4.gz
